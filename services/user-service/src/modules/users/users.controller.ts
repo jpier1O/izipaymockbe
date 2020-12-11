@@ -7,27 +7,29 @@ import { CreateUserDto } from '../../models/DTO/user/create-user-dto';
 export class UsersController {
 	constructor(private usersService: UsersService){}
 
-	@Get()
-	getAllUsers(): User[] {
-		return this.usersService.getAllUsers();
-	}
-
 	@Get('/:id')
 	getUserById(@Param('id') id: string ): User {
 		return this.usersService.getUserById(id);
 	}
 
 	@Post()
-	createUser(
+	async createUser(
 		@Body() createUserDto: CreateUserDto)
 	{
-		return this.usersService.createUser(createUserDto);
+		return await this.usersService.createUser(createUserDto);
 	}
 
 	@Delete('/:id')
 	deleteUser(@Param('id') id: string): void {
 		this.usersService.deleteUser(id);
 	}
+
+	@Get()
+    async listUser() {
+        var listUsers = await this.usersService.getUsers();
+        listUsers = listUsers;
+        return listUsers;
+    }
 
 	/*
 	@Patch('/:id/status')

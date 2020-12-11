@@ -63,27 +63,27 @@ export class UsersService {
 		};
 
 		this.users.push(user);
-
+		console.log(password)
 		return new Promise((resolve, reject) => {
 			return this.userPool.signUp(
 				id,
 				password,
 				[
 						new CognitoUserAttribute({ Name: 'email', Value: email }),
-						new CognitoUserAttribute({ Name: 'id', Value: id }),
+						//new CognitoUserAttribute({ Name: 'user_id', Value: id }),
 						new CognitoUserAttribute({ Name: 'phone_number', Value: phone_number }),
-						new CognitoUserAttribute({ Name: 'user_type', Value: user_type }),
-						new CognitoUserAttribute({ Name: 'title', Value: title }),
-						new CognitoUserAttribute({ Name: 'document_type', Value: document_type }),
-						new CognitoUserAttribute({ Name: 'document_number', Value: document_number }),
+						//new CognitoUserAttribute({ Name: 'user_type', Value: user_type }),
+						//new CognitoUserAttribute({ Name: 'title', Value: title }),
+						//new CognitoUserAttribute({ Name: 'document_type', Value: document_type }),
+						//new CognitoUserAttribute({ Name: 'document_number', Value: document_number }),
 						new CognitoUserAttribute({ Name: 'name', Value: name }),
-						new CognitoUserAttribute({ Name: 'last_name', Value: last_name }),
-						new CognitoUserAttribute({ Name: 'phone_type', Value: phone_type }),
-						new CognitoUserAttribute({ Name: 'secondary_phone_type', Value: secondary_phone_type }),
-						new CognitoUserAttribute({ Name: 'secondary_phone_number', Value: secondary_phone_number }),
-						new CognitoUserAttribute({ Name: 'language', Value: language }),
-						new CognitoUserAttribute({ Name: 'position', Value: position }),
-						new CognitoUserAttribute({ Name: 'state', Value: state }),
+						//new CognitoUserAttribute({ Name: 'last_name', Value: last_name }),
+						//new CognitoUserAttribute({ Name: 'phone_type', Value: phone_type }),
+						//new CognitoUserAttribute({ Name: 'secondary_phone_type', Value: secondary_phone_type }),
+						//new CognitoUserAttribute({ Name: 'secondary_phone_number', Value: secondary_phone_number }),
+						//new CognitoUserAttribute({ Name: 'language', Value: language }),
+						//new CognitoUserAttribute({ Name: 'position', Value: position }),
+						//new CognitoUserAttribute({ Name: 'state', Value: state }),
 				],
 				null,
 				(err: any, result: { user: unknown; }) => {
@@ -100,6 +100,26 @@ export class UsersService {
 	deleteUser(id: string) {
 		this.users.filter(user => user.id !== id);
 	}
+
+	getUsers(){
+		var params = {
+			UserPoolId: this.usersConfig.userPoolId
+		};
+		config.update({ region: this.usersConfig.region, 'accessKeyId': this.usersConfig.clientId});
+		var cognitoidentityserviceprovider = new CognitoIdentityServiceProvider();
+		return new Promise((resolve, reject) =>{
+		  cognitoidentityserviceprovider.listUsers(params, (err, data) => {
+			if (err) {
+				console.log(err);
+				reject(err);
+			}
+			else {
+			  //var lu : Array<ListUserDto> = data.Users;
+				resolve(data.Users);
+			}
+		  })
+		});
+	  }
 
 	/*
 	updateUserStatus(id: string, status: UserStatus) {
